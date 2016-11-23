@@ -94,18 +94,12 @@ export class Ng2MapComponent implements OnChanges, OnDestroy, AfterViewInit {
   }
 
   addGoogleMapsApi(): void {
-    window['ng2MapComponentRef'] = { zone: this.zone, componentFn: () => this.initializeMap()};
-    window['initNg2Map'] = function() {
-      window['ng2MapComponentRef'].zone.run(function() { window['ng2MapComponentRef'].componentFn(); });
-    };
     if (!window['google'] && !document.querySelector('#ng2-map-api')) {
       let script = document.createElement( 'script' );
       script.id = 'ng2-map-api';
+      script.onload = () => this.initializeMap();
+      script.src = Ng2MapComponent['apiUrl'] || 'https://maps.google.com/maps/api/js?v=3&libraries=places,geocoder';
 
-      // script.src = "https://maps.google.com/maps/api/js?callback=initNg2Map";
-      let apiUrl = Ng2MapComponent['apiUrl'] || 'https://maps.google.com/maps/api/js';
-      apiUrl += apiUrl.indexOf('?') ? '&' : '?';
-      script.src = apiUrl + 'callback=initNg2Map';
       document.querySelector('body').appendChild(script);
     }
   }

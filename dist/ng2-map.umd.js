@@ -664,17 +664,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Ng2MapComponent.prototype.addGoogleMapsApi = function () {
 	        var _this = this;
-	        window['ng2MapComponentRef'] = { zone: this.zone, componentFn: function () { return _this.initializeMap(); } };
-	        window['initNg2Map'] = function () {
-	            window['ng2MapComponentRef'].zone.run(function () { window['ng2MapComponentRef'].componentFn(); });
-	        };
 	        if (!window['google'] && !document.querySelector('#ng2-map-api')) {
 	            var script = document.createElement('script');
 	            script.id = 'ng2-map-api';
-	            // script.src = "https://maps.google.com/maps/api/js?callback=initNg2Map";
-	            var apiUrl = Ng2MapComponent['apiUrl'] || 'https://maps.google.com/maps/api/js';
-	            apiUrl += apiUrl.indexOf('?') ? '&' : '?';
-	            script.src = apiUrl + 'callback=initNg2Map';
+	            script.onload = function () { return _this.initializeMap(); };
+	            script.src = Ng2MapComponent['apiUrl'] || 'https://maps.google.com/maps/api/js?v=3&libraries=places,geocoder';
 	            document.querySelector('body').appendChild(script);
 	        }
 	    };
